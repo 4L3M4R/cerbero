@@ -1,0 +1,4 @@
+BTCUSDT:bitget
+ETHUSDT:bitget
+AAPL:yfinance
+MSFT:yfinance
