@@ -24,7 +24,7 @@ jobs:
       # Step 3: Install dependencies including nbconvert
       - name: Install dependencies
         run: |
-          pip install ta
+          pip install ta jupyter
           pip install nbconvert yfinance vaderSentiment transformers torch feedparser
 
       # Step 4: Convert notebook to Python script
