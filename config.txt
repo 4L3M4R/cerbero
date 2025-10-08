@@ -1,3 +1,3 @@
 frecuencia:1D
-Limit:50
-Period:50d
+Limit:90
+Period:90d
