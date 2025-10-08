@@ -1,4 +1,4 @@
-name: Run Colab Notebook Daily
+name: Run Cerbero Notebook Daily
 
 # Trigger: daily at 7 AM UTC and manual runs
 on:
@@ -15,27 +15,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Python
+      # Step 2: List repo files to debug paths
+      - name: List repo files
+        run: ls -R
+
+      # Step 3: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      # Step 3: Install dependencies including nbconvert
+      # Step 4: Install dependencies including nbconvert
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install ta jupyter
           pip install nbconvert yfinance vaderSentiment transformers torch feedparser
 
-      # Step 4: Convert notebook to Python script
+      # Step 5: Convert notebook to Python script
       - name: Convert notebook to script
         run: |
           jupyter nbconvert --to script cerbero.ipynb --output cerbero.py
 
-      # Step 5: Debug: show first 5 lines to confirm latest version
+      # Step 6: Confirm the Python script exists
+      - name: Confirm Python script exists
+        run: ls -l cerbero.py
+
+      # Step 7: Show first 5 lines of the script
       - name: Show first 5 lines
         run: head -n 5 cerbero.py
 
-      # Step 6: Run the generated Python script
+      # Step 8: Run the generated Python script
       - name: Run the script
         run: python cerbero.py
