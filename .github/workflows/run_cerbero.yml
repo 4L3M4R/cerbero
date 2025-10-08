@@ -49,3 +49,13 @@ jobs:
       # Step 8: Run the generated Python script
       - name: Run the script
         run: python cerbero.py
+
+
+      # Step 7: Commit and push updated data files
+      - name: Commit and push updated data
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "GitHub Actions Bot"
+          git add *_datos.txt
+          git diff --cached --quiet || git commit -m "Update generated data files"
+          git push
