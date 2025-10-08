@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1rSbpCGxN47JpdHjVe7q9aXxvO1kw9ob5
 """
 
-!pip install pandas_ta yfinance vaderSentiment transformers torch feedparser
+#!pip install pandas_ta yfinance vaderSentiment transformers torch feedparser
 
 import requests
 import pandas as pd
