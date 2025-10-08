@@ -38,4 +38,4 @@ jobs:
 
       # Step 6: Run the generated Python script
       - name: Run the script
-        run: python indradia.py
+        run: python cerbero.py
