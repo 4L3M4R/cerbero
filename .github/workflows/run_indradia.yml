@@ -30,11 +30,11 @@ jobs:
       # Step 4: Convert notebook to Python script
       - name: Convert notebook to script
         run: |
-          jupyter nbconvert --to script indradia.ipynb --output indradia.py
+          jupyter nbconvert --to script cerbero.ipynb --output cerbero.py
 
       # Step 5: Debug: show first 5 lines to confirm latest version
       - name: Show first 5 lines
-        run: head -n 5 indradia.py
+        run: head -n 5 cerbero.py
 
       # Step 6: Run the generated Python script
       - name: Run the script
