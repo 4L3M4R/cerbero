@@ -36,6 +36,7 @@ jobs:
       - name: Convert notebook to script
         run: |
           jupyter nbconvert --to script cerbero.ipynb --output cerbero
+          mv cerbero.txt cerbero.py || true
 
       # Step 6: Confirm the Python script exists
       - name: Confirm Python script exists
