@@ -21,4 +21,4 @@ jobs:
            pip install pandas_ta yfinance vaderSentiment transformers torch feedparser
            
       - name: Run the script
-        run: python indradia.py
+        run: python intraday/indradia.py
