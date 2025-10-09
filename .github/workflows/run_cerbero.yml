@@ -58,16 +58,17 @@ jobs:
           persist-credentials: false  # VERY IMPORTANT, disables using the default GITHUB_TOKEN
       
       - name: Commit and push updated data
-        env:
-          GH_PAT2: ${{ secrets.GH_PAT2 }}
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
       
-          # Set remote with the personal access token
-          git remote set-url origin https://x-access-token:${GH_PAT2}@github.com/4L3M4R/cerbero.git
-      
+          # Stage all generated data files
           git add *_datos.txt
-          git diff --cached --quiet || git commit -m "Update generated data files"
-          git push origin HEAD:main
       
+          # Commit only if there are changes
+          git diff --cached --quiet || git commit -m "Update generated data files"
+      
+          # Push using the PAT
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
+          git push origin HEAD:main
+            
