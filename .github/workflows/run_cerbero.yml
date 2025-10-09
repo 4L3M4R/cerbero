@@ -50,6 +50,14 @@ jobs:
       - name: Run the script
         run: python cerbero.py
 
+      # Step 6: Backup existing data files
+      - name: Backup existing data files
+        run: |
+          shopt -s nullglob
+          for f in *_datos.txt; do
+              mv "$f" "${f%.txt}_backup_$(date +%Y%m%d%H%M%S).txt"
+          done
+
 
       # Step 7: Commit and push updated data files
       - name: Checkout repository
