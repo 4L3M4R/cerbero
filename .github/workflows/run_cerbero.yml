@@ -53,13 +53,23 @@ jobs:
 
       # Step 7: Commit and push updated data files
       - name: Commit and push updated data
+        env:
+          GH_PAT: ${{ secrets.GH_PAT2 }}  # make sure your secret is named GH_PAT2
         run: |
+          # Configure git
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
+      
+          # Ensure the remote uses the PAT for authentication
+          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/4L3M4R/cerbero.git
+      
+          # Stage any new or updated *_datos.txt files
           git add *_datos.txt
+      
+          # Commit if there are changes
           git diff --cached --quiet || git commit -m "Update generated data files"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT2 }}@github.com/4L3M4R/cerbero.git
+      
+          # Push to the main branch
           git push origin HEAD:main
-
-
-          
+      
+                
