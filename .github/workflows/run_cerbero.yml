@@ -50,6 +50,9 @@ jobs:
       - name: Run the script
         run: python cerbero.py
 
+
+        
+
       # Step 6: Backup existing data files
       - name: Backup existing data files
         run: |
@@ -58,6 +61,12 @@ jobs:
               mv "$f" "${f%.txt}_backup_$(date +%Y%m%d%H%M%S).txt"
           done
 
+      - name: Verificar ubicación real de archivos generados
+        run: |
+          echo "PWD actual:"
+          pwd
+          echo "Archivos _datos.txt encontrados:"
+          find . -name '*_datos.txt'
 
       # Step 7: Commit and push updated data files
       - name: Checkout repository
@@ -82,4 +91,6 @@ jobs:
           # Push usando el token
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
           git push origin HEAD:main
+
+
                   
