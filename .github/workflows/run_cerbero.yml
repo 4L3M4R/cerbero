@@ -61,7 +61,7 @@ jobs:
           git config --local user.name "GitHub Actions Bot"
       
           # Ensure the remote uses the PAT for authentication
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/4L3M4R/cerbero.git
+          git remote set-url origin https://x-access-token:${GH_PAT2}@github.com/4L3M4R/cerbero.git
       
           # Stage any new or updated *_datos.txt files
           git add *_datos.txt
