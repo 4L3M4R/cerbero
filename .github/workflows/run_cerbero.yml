@@ -70,14 +70,16 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
       
-          # Añadir los archivos recién generados
+          echo "Archivos generados:"
+          ls -l   # <--- esto es para debug
+      
+          # Agregar todos los *_datos.txt recién creados
           git add *_datos.txt
       
-          # Solo hace commit si hay cambios (por si el contenido es igual)
-          git diff --cached --quiet || git commit -m "Add new generated data files"
+          # Hacer commit
+          git commit -m "Add new generated data files"
       
-          # Push usando tu token
+          # Push usando el token
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
           git push origin HEAD:main
-
-            
+                  
