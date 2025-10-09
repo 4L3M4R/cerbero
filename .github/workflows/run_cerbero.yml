@@ -52,16 +52,22 @@ jobs:
 
 
       # Step 7: Commit and push updated data files
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false  # VERY IMPORTANT, disables using the default GITHUB_TOKEN
+      
       - name: Commit and push updated data
         env:
-          GH_PAT2: ${{ secrets.GH_PAT2 }}  # pass the secret to the job environment
+          GH_PAT2: ${{ secrets.GH_PAT2 }}
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
       
-          # Make sure remote uses the PAT
+          # Set remote with the personal access token
           git remote set-url origin https://x-access-token:${GH_PAT2}@github.com/4L3M4R/cerbero.git
       
           git add *_datos.txt
           git diff --cached --quiet || git commit -m "Update generated data files"
           git push origin HEAD:main
+      
