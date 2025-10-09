@@ -58,7 +58,7 @@ jobs:
           git config --local user.name "GitHub Actions Bot"
           git add *_datos.txt
           git diff --cached --quiet || git commit -m "Update generated data files"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT2 }}@github.com/4L3M4R/cerbero.git
           git push origin HEAD:main
 
 
