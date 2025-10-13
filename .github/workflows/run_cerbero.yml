@@ -1,45 +1,100 @@
 name: Run Cerbero Notebook Daily
 
+# Trigger: daily at 12:30 UTC (8:30 AM EDT) and manual runs
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '0 */6 * * *' # cada 6 horas
+    - cron: '30 12 * * *'
+  workflow_dispatch:
 
 jobs:
-  run-script:
+  run-notebook:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+      # Step 2: List repo files to debug paths
+      - name: List repo files
+        run: ls -R
 
+      # Step 3: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      # Step 4: Install dependencies
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install --upgrade pip
+          pip install ta jupyter nltk
+          pip install nbconvert yfinance vaderSentiment transformers torch feedparser
 
-      - name: Run data generation script
+      # Step 5: Convert notebook to Python script
+      - name: Convert notebook to script
         run: |
-          echo "Running data generation script..."
-          python intraday/main.py
-          echo "Files generated:"
-          ls -l *_datos.txt || echo "No *_datos.txt files found"
+          jupyter nbconvert --to script cerbero.ipynb --output cerbero
+          mv cerbero.txt cerbero.py || true
 
-      - name: Configure Git user
+      # Step 6: Confirm script exists
+      - name: Confirm Python script exists
+        run: ls -l cerbero.py
+
+      # Step 7: Show first 5 lines of script
+      - name: Show first 5 lines
+        run: head -n 5 cerbero.py
+
+      # Step 8: Run the script
+      - name: Run the script
+        run: python cerbero.py
+
+      # Step 9: Backup existing data files (copy, keep originals)
+      - name: Backup existing data files
+        run: |
+          shopt -s nullglob
+          for f in *_datos.txt; do
+              cp "$f" "${f%.txt}_backup_$(date +%Y%m%d%H%M%S).txt"
+          done
+
+      # Step 10: Verify files
+      - name: Verify generated files
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Generated _datos.txt files:"
+          ls -l *_datos.txt || echo "No _datos.txt files found."
+
+      # ✅ Step 11: Save generated files before fresh checkout
+      - name: Temporarily store generated data files
+        run: |
+          mkdir -p /tmp/generated
+          cp *_datos.txt /tmp/generated || echo "No data files to save"
+
+      # Step 12: Checkout repo again for commit
+      - name: Checkout repository for commit
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false  # Disable default GITHUB_TOKEN
+
+      # ✅ Step 13: Restore generated files
+      - name: Restore generated data files
+        run: |
+          cp /tmp/generated/*_datos.txt . || echo "No files to restore"
+          ls -l *_datos.txt || echo "No restored files found"
+
+      # Step 14: Commit and push new data files
+      - name: Commit and push new data files
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.name "GitHub Actions Bot"
 
-      - name: Commit and push generated data
-        run: |
           echo "Generated data files to commit:"
-          ls -l *_datos.txt || echo "No *_datos.txt files found"
-          
-          git add *_datos.txt
-          git commit -m "Auto-update data files [skip ci]" || echo "No changes to commit"
+          ls -l *_datos.txt || echo "No files found"
+
+          git add *_datos.txt || echo "Nothing to add"
+          git diff --cached --quiet || git commit -m "Add new generated data files" || true
+
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
           git push origin HEAD:main
