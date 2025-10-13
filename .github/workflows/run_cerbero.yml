@@ -1,9 +1,9 @@
 name: Run Cerbero Notebook Daily
 
-# Trigger: daily at 7 AM UTC and manual runs
+# Trigger: daily at 12:30 UTC (8:30 AM EDT) and manual runs
 on:
   schedule:
-    - cron: '30 12 * * *'  # every day at 12:30 UTC (8:30 AM EDT)
+    - cron: '30 12 * * *'
   workflow_dispatch:
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      # Step 4: Install dependencies including nbconvert
+      # Step 4: Install dependencies
       - name: Install dependencies
         run: |
           pip install --upgrade pip
@@ -38,59 +38,51 @@ jobs:
           jupyter nbconvert --to script cerbero.ipynb --output cerbero
           mv cerbero.txt cerbero.py || true
 
-      # Step 6: Confirm the Python script exists
+      # Step 6: Confirm script exists
       - name: Confirm Python script exists
         run: ls -l cerbero.py
 
-      # Step 7: Show first 5 lines of the script
+      # Step 7: Show first 5 lines of script
       - name: Show first 5 lines
         run: head -n 5 cerbero.py
 
-      # Step 8: Run the generated Python script
+      # Step 8: Run the script
       - name: Run the script
         run: python cerbero.py
 
-
-        
-
-      # Step 6: Backup existing data files
+      # Step 9: Backup existing data files (copy, keep originals)
       - name: Backup existing data files
         run: |
           shopt -s nullglob
           for f in *_datos.txt; do
-              mv "$f" "${f%.txt}_backup_$(date +%Y%m%d%H%M%S).txt"
+              cp "$f" "${f%.txt}_backup_$(date +%Y%m%d%H%M%S).txt"
           done
 
-      - name: Verificar ubicación real de archivos generados
+      # Step 10: Verify files
+      - name: Verify generated files
         run: |
-          echo "PWD actual:"
+          echo "Current directory:"
           pwd
-          echo "Archivos _datos.txt encontrados:"
-          find . -name '*'
+          echo "Generated _datos.txt files:"
+          ls -l *_datos.txt || echo "No _datos.txt files found."
 
-      # Step 7: Commit and push updated data files
-      - name: Checkout repository
+      # Step 11: Checkout repo again without default credentials
+      - name: Checkout repository for commit
         uses: actions/checkout@v3
         with:
-          persist-credentials: false  # VERY IMPORTANT, disables using the default GITHUB_TOKEN
-      
+          persist-credentials: false  # Disable default GITHUB_TOKEN
+
+      # Step 12: Commit and push new data files
       - name: Commit and push new data files
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
-      
-          echo "Archivos generados:"
-          ls -l   # <--- esto es para debug
-      
-          # Agregar todos los *_datos.txt recién creados
+
+          echo "Generated data files to commit:"
+          ls -l *_datos.txt || echo "No files found"
+
           git add *_datos.txt
-      
-          # Hacer commit
-          git commit -m "Add new generated data files"
-      
-          # Push usando el token
+          git diff --cached --quiet || git commit -m "Add new generated data files"
+
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
           git push origin HEAD:main
-
-
-                  
