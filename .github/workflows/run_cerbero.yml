@@ -1,9 +1,8 @@
 name: Run Cerbero Notebook Daily
 
-# Trigger: daily at 12:30 UTC (8:30 AM EDT) and manual runs
 on:
   schedule:
-    - cron: '30 12 * * *'
+    - cron: '30 12 * * *'  # 8:30 AM EDT daily
   workflow_dispatch:
 
 jobs:
@@ -15,89 +14,71 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: List repo files to debug paths
-      - name: List repo files
-        run: ls -R
-
-      # Step 3: Set up Python
+      # Step 2: Setup Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      # Step 4: Install dependencies
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install ta jupyter nltk
           pip install nbconvert yfinance vaderSentiment transformers torch feedparser
 
-      # Step 5: Convert notebook to Python script
+      # Step 4: Convert notebook to Python script
       - name: Convert notebook to script
         run: |
           jupyter nbconvert --to script cerbero.ipynb --output cerbero
           mv cerbero.txt cerbero.py || true
 
-      # Step 6: Confirm script exists
-      - name: Confirm Python script exists
-        run: ls -l cerbero.py
-
-      # Step 7: Show first 5 lines of script
-      - name: Show first 5 lines
-        run: head -n 5 cerbero.py
-
-      # Step 8: Run the script
+      # Step 5: Run script
       - name: Run the script
         run: python cerbero.py
 
-      # ✅ Step 9: Backup data files into repo "backup" folder
-      - name: Backup existing data files to repo
+      # ✅ Step 6: Backup data files and persist them to /tmp
+      - name: Backup existing data files to /tmp
         run: |
-          mkdir -p backup
+          mkdir -p /tmp/generated
+          mkdir -p /tmp/backup
           shopt -s nullglob
           timestamp=$(date +%Y%m%d%H%M%S)
           for f in *_datos.txt; do
-              cp "$f" "backup/${f%.txt}_backup_${timestamp}.txt"
+              echo "Backing up $f..."
+              cp "$f" "/tmp/generated/$f"
+              cp "$f" "/tmp/backup/${f%.txt}_backup_${timestamp}.txt"
           done
-          echo "Backups created in ./backup/"
-          ls -l backup || echo "No backups found"
+          echo "Contents of /tmp/generated:"
+          ls -l /tmp/generated || echo "No generated files"
+          echo "Contents of /tmp/backup:"
+          ls -l /tmp/backup || echo "No backups found"
 
-      # Step 10: Verify files
-      - name: Verify generated files
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Generated _datos.txt files:"
-          ls -l *_datos.txt || echo "No _datos.txt files found."
-
-      # ✅ Step 11: Temporarily store generated data files before checkout
-      - name: Temporarily store generated data files
-        run: |
-          mkdir -p /tmp/generated
-          cp *_datos.txt /tmp/generated || echo "No data files to save"
-
-      # Step 12: Checkout repo again for commit
-      - name: Checkout repository for commit
+      # Step 7: Checkout repo again clean for commit
+      - name: Checkout repository again for commit
         uses: actions/checkout@v3
         with:
-          persist-credentials: false  # Disable default GITHUB_TOKEN
+          persist-credentials: false
 
-      # ✅ Step 13: Restore generated and backup files
+      # ✅ Step 8: Restore both generated and backup files from /tmp
       - name: Restore generated and backup files
         run: |
-          cp /tmp/generated/*_datos.txt . || echo "No files to restore"
-          ls -l *_datos.txt || echo "No restored files found"
-          echo "Backup folder contents:"
-          ls -l backup || echo "No backups found"
+          mkdir -p backup
+          cp /tmp/generated/*_datos.txt . 2>/dev/null || echo "No data files restored"
+          cp /tmp/backup/* backup/ 2>/dev/null || echo "No backup files restored"
+          echo "Restored data files:"
+          ls -l *_datos.txt || echo "No restored data files"
+          echo "Restored backup folder contents:"
+          ls -l backup || echo "No backup files"
 
-      # Step 14: Commit and push all updates (data + backups)
-      - name: Commit and push new data and backups
+      # ✅ Step 9: Commit and push all updates (data + backups)
+      - name: Commit and push updates
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
 
-          echo "Generated and backup files to commit:"
-          ls -l *_datos.txt backup || echo "No files found"
+          echo "Preparing to commit:"
+          ls -l *_datos.txt backup || echo "No files to commit"
 
           git add *_datos.txt backup/ || echo "Nothing to add"
           git diff --cached --quiet || git commit -m "Update generated data and backups" || true
@@ -105,6 +86,6 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
           git push origin HEAD:main
 
-      # (Optional) Step 15: Show last commit summary
+      # Optional: show commit summary
       - name: Show last commit
         run: git log -1 --stat
