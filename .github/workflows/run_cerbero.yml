@@ -1,4 +1,4 @@
-name: Run indrad and save data
+name: Run Cerbero Notebook Daily
 
 on:
   workflow_dispatch:
