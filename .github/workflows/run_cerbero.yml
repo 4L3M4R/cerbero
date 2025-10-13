@@ -50,13 +50,17 @@ jobs:
       - name: Run the script
         run: python cerbero.py
 
-      # Step 9: Backup existing data files (copy, keep originals)
-      - name: Backup existing data files
+      # ✅ Step 9: Backup data files into repo "backup" folder
+      - name: Backup existing data files to repo
         run: |
+          mkdir -p backup
           shopt -s nullglob
+          timestamp=$(date +%Y%m%d%H%M%S)
           for f in *_datos.txt; do
-              cp "$f" "${f%.txt}_backup_$(date +%Y%m%d%H%M%S).txt"
+              cp "$f" "backup/${f%.txt}_backup_${timestamp}.txt"
           done
+          echo "Backups created in ./backup/"
+          ls -l backup || echo "No backups found"
 
       # Step 10: Verify files
       - name: Verify generated files
@@ -66,7 +70,7 @@ jobs:
           echo "Generated _datos.txt files:"
           ls -l *_datos.txt || echo "No _datos.txt files found."
 
-      # ✅ Step 11: Save generated files before fresh checkout
+      # ✅ Step 11: Temporarily store generated data files before checkout
       - name: Temporarily store generated data files
         run: |
           mkdir -p /tmp/generated
@@ -78,23 +82,29 @@ jobs:
         with:
           persist-credentials: false  # Disable default GITHUB_TOKEN
 
-      # ✅ Step 13: Restore generated files
-      - name: Restore generated data files
+      # ✅ Step 13: Restore generated and backup files
+      - name: Restore generated and backup files
         run: |
           cp /tmp/generated/*_datos.txt . || echo "No files to restore"
           ls -l *_datos.txt || echo "No restored files found"
+          echo "Backup folder contents:"
+          ls -l backup || echo "No backups found"
 
-      # Step 14: Commit and push new data files
-      - name: Commit and push new data files
+      # Step 14: Commit and push all updates (data + backups)
+      - name: Commit and push new data and backups
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
 
-          echo "Generated data files to commit:"
-          ls -l *_datos.txt || echo "No files found"
+          echo "Generated and backup files to commit:"
+          ls -l *_datos.txt backup || echo "No files found"
 
-          git add *_datos.txt || echo "Nothing to add"
-          git diff --cached --quiet || git commit -m "Add new generated data files" || true
+          git add *_datos.txt backup/ || echo "Nothing to add"
+          git diff --cached --quiet || git commit -m "Update generated data and backups" || true
 
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
           git push origin HEAD:main
+
+      # (Optional) Step 15: Show last commit summary
+      - name: Show last commit
+        run: git log -1 --stat
