@@ -2,7 +2,7 @@ name: Run Cerbero Notebook Daily
 
 on:
   schedule:
-    - cron: '30 12 * * *'  # 8:30 AM EDT daily
+    - cron: '0 11 * * *'  # 7:00 AM EDT
   workflow_dispatch:
 
 jobs:
