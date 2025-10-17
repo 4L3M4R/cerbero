@@ -70,23 +70,21 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
-
+      
           echo "Preparing to commit:"
           ls -l *_datos.txt backup || echo "No files to commit"
-
-          # Stage everything (all new/modified/deleted files)
-          git add -A
-
-          # Commit only if there are changes
-          if ! git diff --cached --quiet; then
-              git commit -m "Update generated data and backups"
-          else
-              echo "No changes to commit"
-          fi
-
-          # Push using PAT
+      
+          git add *_datos.txt backup/ || echo "Nothing to add"
+      
+          # ← Aquí agregarías los logs nuevos:
+          git add logs/*_descargadas_*.csv logs/*_nuevas_agregadas_*.csv
+          git add logs/log_resumen.txt || echo "No logs to add"
+      
+          git diff --cached --quiet || git commit -m "Update generated data, backups and logs" || true
+      
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
           git push origin HEAD:main
+
       # Optional: show last commit
       - name: Show last commit
         run: git log -1 --stat
