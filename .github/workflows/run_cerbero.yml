@@ -74,12 +74,19 @@ jobs:
           echo "Preparing to commit:"
           ls -l *_datos.txt backup || echo "No files to commit"
 
-          git add *_datos.txt backup/ || echo "Nothing to add"
-          git diff --cached --quiet || git commit -m "Update generated data and backups" || true
+          # Stage everything (all new/modified/deleted files)
+          git add -A
 
+          # Commit only if there are changes
+          if ! git diff --cached --quiet; then
+              git commit -m "Update generated data and backups"
+          else
+              echo "No changes to commit"
+          fi
+
+          # Push using PAT
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
           git push origin HEAD:main
-
       # Optional: show last commit
       - name: Show last commit
         run: git log -1 --stat
