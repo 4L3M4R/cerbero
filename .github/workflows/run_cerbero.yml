@@ -68,6 +68,8 @@ jobs:
       # Step 8: Commit and push all updates (new data + backup)
 
       - name: Commit and push updates
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
@@ -83,11 +85,10 @@ jobs:
       
           git diff --cached --quiet || git commit -m "Update generated data, backups and logs" || true
 
-      - name: Set remote URL
-        run: git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
-        
-      - name: Push updates
-        run: git push origin HEAD:main
+          echo "Resetting remote URL using GH_PAT..."
+          git remote set-url origin "https://x-access-token:${GH_PAT}@github.com/4L3M4R/cerbero.git"
+          git push origin HEAD:main   
+   
 
       # Optional: show last commit
       - name: Show last commit
