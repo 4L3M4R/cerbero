@@ -27,18 +27,8 @@ jobs:
           pip install ta jupyter nltk
           pip install nbconvert yfinance vaderSentiment transformers torch feedparser
 
-      # Step 4: Convert notebook to Python script
-      - name: Convert notebook to script
-        run: |
-          jupyter nbconvert --to script cerbero.ipynb --output cerbero
-          mv cerbero.txt cerbero.py || true
-
-      # Step 5: Run script
-      - name: Run the script
-        run: python cerbero.py
-
-      # ✅ Step 6: Backup data files and persist them to /tmp
-      - name: Backup existing data files to /tmp
+      # Step 4: Backup existing data files BEFORE running the script
+      - name: Backup existing data files
         run: |
           mkdir -p /tmp/generated
           mkdir -p /tmp/backup
@@ -54,14 +44,18 @@ jobs:
           echo "Contents of /tmp/backup:"
           ls -l /tmp/backup || echo "No backups found"
 
-      # Step 7: Checkout repo again clean for commit
-      - name: Checkout repository again for commit
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
+      # Step 5: Convert notebook to Python script
+      - name: Convert notebook to script
+        run: |
+          jupyter nbconvert --to script cerbero.ipynb --output cerbero
+          mv cerbero.txt cerbero.py || true
 
-      # ✅ Step 8: Restore both generated and backup files from /tmp
-      - name: Restore generated and backup files
+      # Step 6: Run the script (generates new lines / updates)
+      - name: Run the script
+        run: python cerbero.py
+
+      # Step 7: Restore backup files into repo folder
+      - name: Restore backup files to repo
         run: |
           mkdir -p backup
           cp /tmp/generated/*_datos.txt . 2>/dev/null || echo "No data files restored"
@@ -71,7 +65,7 @@ jobs:
           echo "Restored backup folder contents:"
           ls -l backup || echo "No backup files"
 
-      # ✅ Step 9: Commit and push all updates (data + backups)
+      # Step 8: Commit and push all updates (new data + backup)
       - name: Commit and push updates
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -86,6 +80,6 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
           git push origin HEAD:main
 
-      # Optional: show commit summary
+      # Optional: show last commit
       - name: Show last commit
         run: git log -1 --stat
