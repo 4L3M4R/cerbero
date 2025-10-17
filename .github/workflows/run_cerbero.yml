@@ -66,6 +66,7 @@ jobs:
           ls -l backup || echo "No backup files"
 
       # Step 8: Commit and push all updates (new data + backup)
+
       - name: Commit and push updates
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -82,8 +83,11 @@ jobs:
       
           git diff --cached --quiet || git commit -m "Update generated data, backups and logs" || true
 
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
-          git push origin HEAD:main
+      - name: Set remote URL
+        run: git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/4L3M4R/cerbero.git
+        
+      - name: Push updates
+        run: git push origin HEAD:main
 
       # Optional: show last commit
       - name: Show last commit
