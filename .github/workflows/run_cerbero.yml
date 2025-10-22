@@ -61,15 +61,11 @@ jobs:
       - name: Restore backup files to repo
         run: |
           mkdir -p backup
-          cp /tmp/generated/*_datos.txt . 2>/dev/null || echo "No data files restored"
           cp /tmp/backup/* backup/ 2>/dev/null || echo "No backup files restored"
-          echo "Restored data files:"
-          ls -l *_datos.txt || echo "No restored data files"
           echo "Restored backup folder contents:"
           ls -l backup || echo "No backup files"
-
-      # Step 8: Commit and push all updates (new data + backup)
-
+            # Step 8: Commit and push all updates (new data + backup)
+      
       - name: Commit and push updates
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
