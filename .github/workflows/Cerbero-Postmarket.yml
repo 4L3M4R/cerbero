@@ -25,6 +25,13 @@ jobs:
           pip install --upgrade pip
           pip install ta yfinance jupyter nltk vaderSentiment transformers torch feedparser
 
+
+      - name: Convert notebook to script
+        run: |
+          jupyter nbconvert --to script cerbero-post.ipynb --output cerbero
+          mv cerbero.txt cerbero.py || true
+
+          
       - name: Run postmarket script
         run: python cerbero-post.py
 
