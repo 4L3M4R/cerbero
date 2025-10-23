@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install nltk vaderSentiment transformers torch feedparser jupyter
+          pip install nltk vaderSentiment transformers torch feedparser jupyter pandas
 
       - name: Convert notebook to script
         run: |
