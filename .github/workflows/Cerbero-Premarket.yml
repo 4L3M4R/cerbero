@@ -27,8 +27,8 @@ jobs:
 
       - name: Convert notebook to script
         run: |
-          jupyter nbconvert --to script cerbero-post.ipynb
-          mv cerbero-post.py cerbero-post.py
+          jupyter nbconvert --to script cerbero-pre.ipynb
+          mv cerbero-pre.py cerbero-pre.py
 
           
       - name: Run premarket script
