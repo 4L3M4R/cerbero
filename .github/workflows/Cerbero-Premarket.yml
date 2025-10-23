@@ -25,6 +25,12 @@ jobs:
           pip install --upgrade pip
           pip install nltk vaderSentiment transformers torch feedparser
 
+      - name: Convert notebook to script
+        run: |
+          jupyter nbconvert --to script cerbero-post.ipynb
+          mv cerbero-post.py cerbero-post.py
+
+          
       - name: Run premarket script
         run: python cerbero-pre.py
 
