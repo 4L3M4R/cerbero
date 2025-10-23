@@ -29,7 +29,7 @@ jobs:
       - name: Convert notebook to script
         run: |
           jupyter nbconvert --to script cerbero-post.ipynb --output cerbero
-          mv cerbero.txt cerbero.py || true
+          mv cerbero.txt cerbero-post.py || true
 
           
       - name: Run postmarket script
