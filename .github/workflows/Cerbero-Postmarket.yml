@@ -1,0 +1,40 @@
+name: Cerbero Postmarket
+
+on:
+  schedule:
+    - cron: '0 23 * * *'  # 7:00 PM EDT
+  workflow_dispatch:
+
+jobs:
+  cerbero-post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install ta yfinance jupyter nltk vaderSentiment transformers torch feedparser
+
+      - name: Run postmarket script
+        run: python cerbero-post.py
+
+      - name: Commit and push updates
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "GitHub Actions Bot"
+          git add *_datos.txt backup/
+          git commit -m "Update postmarket data and indicators" || true
+          git remote set-url origin "https://x-access-token:${GH_PAT}@github.com/4L3M4R/cerbero.git"
+          git push origin HEAD:main
