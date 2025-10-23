@@ -1,0 +1,40 @@
+name: Cerbero Premarket
+
+on:
+  schedule:
+    - cron: '0 11 * * *'  # 7:00 AM EDT
+  workflow_dispatch:
+
+jobs:
+  cerbero-pre:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install nltk vaderSentiment transformers torch feedparser
+
+      - name: Run premarket script
+        run: python cerbero-pre.py
+
+      - name: Commit and push updates
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "GitHub Actions Bot"
+          git add logs/
+          git commit -m "Update premarket news & sentiment" || true
+          git remote set-url origin "https://x-access-token:${GH_PAT}@github.com/4L3M4R/cerbero.git"
+          git push origin HEAD:main
