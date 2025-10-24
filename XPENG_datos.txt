@@ -1,0 +1,2 @@
+timestamp	vader	finbert
+2025-10-23	0.09819199999999999	0.0
