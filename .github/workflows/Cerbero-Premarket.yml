@@ -10,36 +10,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repository (with all files)
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_PAT }}
 
+      # 2️⃣ Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install nltk vaderSentiment transformers torch feedparser jupyter pandas
 
+      # 4️⃣ Convert notebook to script
       - name: Convert notebook to script
         run: |
           jupyter nbconvert --to script cerbero-pre.ipynb --output cerbero
           mv cerbero.txt cerbero-pre.py || true
-          
+
+      # 5️⃣ Run premarket script
       - name: Run premarket script
         run: python cerbero-pre.py
 
+      # 6️⃣ Commit and push updated logs and data files
       - name: Commit and push updates
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
-          git add logs/
+          # Add both logs and datos files
+          git add logs/ datos_*.txt
           git commit -m "Update premarket news & sentiment" || true
           git remote set-url origin "https://x-access-token:${GH_PAT}@github.com/4L3M4R/cerbero.git"
           git push origin HEAD:main
