@@ -1,2 +1,2 @@
 timestamp	vader	finbert	sentiment_ratio	sentiment_combined
-2025-10-23	0.123764	0.0	123763999.99999999	0.061882
+2025-10-23	0.096294	0.0	96294000.0	0.048147
