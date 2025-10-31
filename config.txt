@@ -1,3 +1,10 @@
 frecuencia:1D
 limit:90
 period:5d
+high_threshold=5
+medium_threshold=2
+low_threshold=0.5
+below_threshold=0
+#mode=daily
+mode=full
+
