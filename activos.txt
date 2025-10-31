@@ -1,4 +1,3 @@
-# --- Cryptocurrency ---
 BTCUSDT:bitget:Bitcoin:cryptocurrency:payment:1:1
 LTCUSDT:bitget:Litecoin:cryptocurrency:payment:1:1
 DOGEUSDT:bitget:Dogecoin:cryptocurrency:payment:1:1
@@ -19,8 +18,6 @@ TRXUSDT:bitget:Tron:cryptocurrency:DeFi:1:4
 ETCUSDT:bitget:Ethereum Classic:cryptocurrency:DeFi:1:4
 ICPUSDT:bitget:Internet Computer:cryptocurrency:platform:1:2
 VETUSDT:bitget:VeChain:cryptocurrency:DeFi:1:4
-
-# --- Stock ---
 AAPL:yfinance:Apple:stock:technology:2:11
 MSFT:yfinance:Microsoft:stock:technology:2:11
 GOOGL:yfinance:Google:stock:technology:2:11
