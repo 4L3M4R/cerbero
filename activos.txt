@@ -1,70 +1,69 @@
-BTCUSDT:bitget:bitcoin
-ETHUSDT:bitget:ethereum
-BNBUSDT:bitget:binance
-SOLUSDT:bitget:solana
-ADAUSDT:bitget:cardano
-XRPUSDT:bitget:ripple
-DOGEUSDT:bitget:dogecoin
-DOTUSDT:bitget:polkadot
-AVAXUSDT:bitget:avalanche
-MATICUSDT:bitget:polygon
-LTCUSDT:bitget:litecoin
-LINKUSDT:bitget:chainlink
-UNIUSDT:bitget:uniswap
-ATOMUSDT:bitget:cosmos
-ALGOUSDT:bitget:algorand
-FILUSDT:bitget:filecoin
-TRXUSDT:bitget:tron
-ETCUSDT:bitget:ethereum-classic
-ICPUSDT:bitget:internet-computer
-VETUSDT:bitget:vechain
-SHIBUSDT:bitget:shiba-inu
-FTMUSDT:bitget:fantom
-EGLDUSDT:bitget:elrond
-THETAUSDT:bitget:theta
-XTZUSDT:bitget:tezos
-AAPL:yfinance:Apple
-MSFT:yfinance:Microsoft
-GOOGL:yfinance:Google
-AMZN:yfinance:Amazon
-TSLA:yfinance:Tesla
-META:yfinance:Meta
-NVDA:yfinance:Nvidia
-NFLX:yfinance:Netflix
-ORCL:yfinance:Oracle
-IBM:yfinance:IBM
-INTC:yfinance:Intel
-ADBE:yfinance:Adobe
-CRM:yfinance:Salesforce
-PYPL:yfinance:PayPal
-QCOM:yfinance:Qualcomm
-SAP:yfinance:SAP
-SONY:yfinance:Sony
-BABA:yfinance:Alibaba
-TCEHY:yfinance:Tencent
-JD:yfinance:JD.com
-UBER:yfinance:Uber
-LYFT:yfinance:Lyft
-SHOP:yfinance:Shopify
-SQ:yfinance:Square
-TWTR:yfinance:Twitter
-PINS:yfinance:Pinterest
-ROKU:yfinance:Roku
-SNOW:yfinance:Snowflake
-ZM:yfinance:Zoom
-DOCU:yfinance:DocuSign
-CRWD:yfinance:CrowdStrike
-OKTA:yfinance:Okta
-PLTR:yfinance:Palantir
-ETSY:yfinance:Etsy
-TWLO:yfinance:Twilio
-SPOT:yfinance:Spotify
-BYND:yfinance:Beyond Meat
-FSLY:yfinance:Fastsly
-BIDU:yfinance:Baidu
-NIO:yfinance:Nio
-LI:yfinance:Li Auto
-XPENG:yfinance:Xpeng
-F:yfinance:Ford
-GM:yfinance:General Motors
-RIVN:yfinance:Rivian
+# --- Cryptocurrency ---
+BTCUSDT:bitget:Bitcoin:cryptocurrency:payment:1:1
+LTCUSDT:bitget:Litecoin:cryptocurrency:payment:1:1
+DOGEUSDT:bitget:Dogecoin:cryptocurrency:payment:1:1
+ETHUSDT:bitget:Ethereum:cryptocurrency:platform:1:2
+SOLUSDT:bitget:Solana:cryptocurrency:platform:1:2
+ADAUSDT:bitget:Cardano:cryptocurrency:platform:1:2
+DOTUSDT:bitget:Polkadot:cryptocurrency:platform:1:2
+AVAXUSDT:bitget:Avalanche:cryptocurrency:platform:1:2
+MATICUSDT:bitget:Polygon:cryptocurrency:platform:1:2
+BNBUSDT:bitget:Binance Coin:cryptocurrency:exchange:1:3
+COINUSDT:bitget:Coinbase:cryptocurrency:exchange:1:3
+UNIUSDT:bitget:Uniswap:cryptocurrency:DeFi:1:4
+LINKUSDT:bitget:Chainlink:cryptocurrency:DeFi:1:4
+ATOMUSDT:bitget:Cosmos:cryptocurrency:DeFi:1:4
+ALGOUSDT:bitget:Algorand:cryptocurrency:DeFi:1:4
+FILUSDT:bitget:Filecoin:cryptocurrency:DeFi:1:4
+TRXUSDT:bitget:Tron:cryptocurrency:DeFi:1:4
+ETCUSDT:bitget:Ethereum Classic:cryptocurrency:DeFi:1:4
+ICPUSDT:bitget:Internet Computer:cryptocurrency:platform:1:2
+VETUSDT:bitget:VeChain:cryptocurrency:DeFi:1:4
+
+# --- Stock ---
+AAPL:yfinance:Apple:stock:technology:2:11
+MSFT:yfinance:Microsoft:stock:technology:2:11
+GOOGL:yfinance:Google:stock:technology:2:11
+NVDA:yfinance:Nvidia:stock:technology:2:11
+INTC:yfinance:Intel:stock:technology:2:11
+ADBE:yfinance:Adobe:stock:technology:2:11
+BIDU:yfinance:Baidu:stock:technology:2:11
+TCEHY:yfinance:Tencent:stock:technology:2:11
+META:yfinance:Meta:stock:social-media:2:12
+TWTR:yfinance:Twitter:stock:social-media:2:12
+PINS:yfinance:Pinterest:stock:social-media:2:12
+NFLX:yfinance:Netflix:stock:streaming-media:2:13
+ROKU:yfinance:Roku:stock:streaming-media:2:13
+SPOT:yfinance:Spotify:stock:streaming-media:2:13
+DIS:yfinance:Disney:stock:streaming-media:2:13
+AMZN:yfinance:Amazon:stock:e-commerce:2:14
+BABA:yfinance:Alibaba:stock:e-commerce:2:14
+JD:yfinance:JD.com:stock:e-commerce:2:14
+SHOP:yfinance:Shopify:stock:e-commerce:2:14
+ETSY:yfinance:Etsy:stock:e-commerce:2:14
+TSLA:yfinance:Tesla:stock:automotive:2:15
+NIO:yfinance:Nio:stock:automotive:2:15
+LI:yfinance:Li Auto:stock:automotive:2:15
+RIVN:yfinance:Rivian:stock:automotive:2:15
+F:yfinance:Ford:stock:automotive:2:15
+GM:yfinance:General Motors:stock:automotive:2:15
+XPENG:yfinance:Xpeng:stock:automotive:2:15
+ENPH:yfinance:Enphase Energy:stock:environment:2:16
+FSLR:yfinance:First Solar:stock:environment:2:16
+NEE:yfinance:NextEra Energy:stock:environment:2:16
+BYND:yfinance:Beyond Meat:stock:environment:2:16
+AIQ:yfinance:Global X AI ETF:stock:AI:2:17
+C3:yfinance:C3.ai:stock:AI:2:17
+PLTR:yfinance:Palantir:stock:AI:2:17
+TWLO:yfinance:Twilio:stock:AI:2:17
+SNOW:yfinance:Snowflake:stock:AI:2:17
+DOCU:yfinance:DocuSign:stock:AI:2:17
+CRWD:yfinance:CrowdStrike:stock:AI:2:17
+OKTA:yfinance:Okta:stock:AI:2:17
+PYPL:yfinance:PayPal:stock:fintech:2:18
+SQ:yfinance:Square:stock:fintech:2:18
+MSTR:yfinance:MicroStrategy:stock:fintech:2:18
+ORCL:yfinance:Oracle:stock:enterprise-software:2:19
+IBM:yfinance:IBM:stock:enterprise-software:2:19
+CRM:yfinance:Salesforce:stock:enterprise-software:2:19
+SAP:yfinance:SAP:stock:enterprise-software:2:19
