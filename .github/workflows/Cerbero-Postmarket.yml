@@ -1,10 +1,9 @@
 name: Cerbero Postmarket
-
 on:
   schedule:
-    - cron: '0 23 * * *'  # 7:00 PM EDT
+    - cron: '5 0 * * *'  # 12:05 AM UTC (7:05 PM EST previous day)
   workflow_dispatch:
-
+  
 jobs:
   cerbero-post:
     runs-on: ubuntu-latest
