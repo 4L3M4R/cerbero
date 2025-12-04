@@ -52,4 +52,4 @@ jobs:
 
           # Push a la rama que disparó el workflow
           git remote set-url origin "https://x-access-token:${GH_PAT}@github.com/4L3M4R/cerbero.git"
-          git push origin HEAD:${GITHUB_REF##*/}
+          git push origin HEAD:${{ github.ref_name }}
