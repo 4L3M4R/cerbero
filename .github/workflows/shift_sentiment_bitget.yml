@@ -1,0 +1,55 @@
+name: shift_sentiment_bitget
+
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  update-sentiment:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas
+
+      # 4️⃣ Run the sentiment shift script
+      - name: Run shift_sentiment_bitget.py
+        run: |
+          python shift_sentiment_bitget.py
+
+      # 5️⃣ Commit & push generated files dynamically
+      - name: Commit & push generated files
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "GitHub Actions Bot"
+
+          # Agregar archivos de datos y backups generados
+          git add *_datos.txt
+          git add backup_sentiment_shift_bitget_*/
+
+          # Agregar archivos de script y configuración (si cambian)
+          git add shift_sentiment_bitget.py
+          git add activos.txt
+          git add config.txt
+
+          # Commit cambios (si hay)
+          git commit -m "Update sentiment files and backup folder" || echo "No changes to commit"
+
+          # Push a la rama que disparó el workflow
+          git remote set-url origin "https://x-access-token:${GH_PAT}@github.com/4L3M4R/cerbero.git"
+          git push origin HEAD:${GITHUB_REF##*/}

@@ -49,4 +49,4 @@ jobs:
           git add *_datos.txt
           git commit -m "Update premarket news & sentiment" || true
           git remote set-url origin "https://x-access-token:${GH_PAT}@github.com/4L3M4R/cerbero.git"
-          git push origin HEAD:main
+          git push origin HEAD:${{ github.ref_name }}
