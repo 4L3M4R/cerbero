@@ -1,7 +1,10 @@
-name: Update Sentiment - shift_sentiment_bitget
+name: Update Sentiment shift_sentiment_bitget
+
 
 on:
-  workflow_dispatch:       # Permite ejecutar manualmente desde GitHub
+  schedule:
+    - cron: '5 0 * * *'  # 12:05 AM UTC (7:05 PM EST previous day)
+  workflow_dispatch:
   
 jobs:
   update-sentiment:
