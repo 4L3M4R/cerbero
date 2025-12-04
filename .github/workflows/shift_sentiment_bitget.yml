@@ -10,9 +10,14 @@ jobs:
 
     steps:
       # 1️⃣ Checkout repo
+
+
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_PAT }}
 
+    
       # 2️⃣ Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
