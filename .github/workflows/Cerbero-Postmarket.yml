@@ -43,4 +43,4 @@ jobs:
           git add *_datos.txt backup/
           git commit -m "Update postmarket data and indicators" || true
           git remote set-url origin "https://x-access-token:${GH_PAT}@github.com/4L3M4R/cerbero.git"
-          git push origin HEAD:main
+          git push origin HEAD:dec
