@@ -1,2 +1,2 @@
 timestamp	vader	finbert	sentiment_ratio	sentiment_combined	target_category	target	return_pct	target_num
-2025-10-23	0.070014	0.0	70014000.0	0.035007				
+2025-10-23	0.06704899999999998	0.0	67048999.99999998	0.03352449999999999				
